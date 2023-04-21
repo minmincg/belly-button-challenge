@@ -2,6 +2,8 @@
 const URL = "https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json";
 
 function setUp() {
+    // solamente la lista dropdown de los posibles children junto con la primer 
+    // grafica e informacion!!!!
     d3.json(URL).then((data) => {
         
         console.log("Here is the JSON data:")
@@ -35,13 +37,15 @@ function demoBox(subjectId) {
 
 function allGraphs(subjectId) {
     console.log(`we're using ${subjectId} info to make graphs!`)
-    let barSpace = d3.select('')
+    let barSpace = d3.select('');
     d3.json(URL).then((data) => {
+        // figure out how to grab data here!!!!!!
+        barSpace.html('');
         let subjectOtuId = data.samples.filter(obj => obj.id == subjectId)[0];
-          
-    })
-    
-      
+        Object.entries(subjectOtuId).forEach(([key,val]) => {
+            barSpace.append('h6').text(`${key.toUpperCase()}: ${val}`)
+        });   
+    });
 }
 //     let choice = d3.select('select').node().value;
 
