@@ -72,10 +72,11 @@ function allGraphs(subjectId) {
             x: otu_ids,
             y: sample_values,
             mode: 'markers',
+            text: otu_labels,
             marker: {
-                color: ['rgb(93, 164, 214)', 'rgb(255, 144, 14)',  'rgb(44, 160, 101)', 'rgb(255, 65, 54)'],
-                // opacity: [1, 0.8, 0.6, 0.4],
-                size: [40, 60, 80, 100]
+                color: otu_ids,
+                size: sample_values,
+                colorscale: 'Earth'
               }
         };
         let bubbleData = [bubbleTrace];
@@ -84,7 +85,7 @@ function allGraphs(subjectId) {
             title: 'Bacteria Cultures',
             showlegend: true,
             height: 600,
-            width: 600
+            width: 1500
           };
           
           Plotly.newPlot("bubble", bubbleData, bubbleLayout);
