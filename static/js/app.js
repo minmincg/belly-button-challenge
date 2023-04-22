@@ -5,9 +5,8 @@ function setUp() {
     // solamente la lista dropdown de los posibles children junto con la primer 
     // grafica e informacion!!!!
     d3.json(URL).then((data) => {
-        
-        console.log("Here is the JSON data:")
-        console.log(data);
+        // console.log("Here is the JSON data:")
+        // console.log(data);
         let names = data.names;
 
         names.forEach(id =>  {
@@ -37,40 +36,60 @@ function demoBox(subjectId) {
 
 function allGraphs(subjectId) {
     console.log(`we're using ${subjectId} info to make graphs!`)
-    let barSpace = d3.select('');
+    // let barSpace = d3.select('');
     d3.json(URL).then((data) => {
         // figure out how to grab data here!!!!!!
-        barSpace.html('');
-        let subjectOtuId = data.samples.filter(obj => obj.id == subjectId)[0];
-        Object.entries(subjectOtuId).forEach(([key,val]) => {
-            barSpace.append('h6').text(`${key.toUpperCase()}: ${val}`)
-        });   
-    });
-}
-//     let choice = d3.select('select').node().value;
+        let samples = data.samples;
+        let resultArray = samples.filter((sampleObj) => sampleObj.id == subjectId);
+        let result = resultArray[0];
 
-//     d3.json('./static/data/samples.json').then(({metadata,samples}) =>{
-//         let meta = metadata.filter(onj => obj.id == choice)[0];
-//         let sample = samples.filter(obj => obj.id == choice)[0];
+        let otu_ids = result.otu_ids;
+        console.log(`aqui estan ${otu_ids}`);
+        let otu_labels = result.otu_labels;
+        let sample_values = result.sample_values;
 
-//         d3.select('.panel-body').html('');
-//         Object.entries(meta).forEach(([key,val]) => {
-//         console.log(sample);
+        let yticks = otu_ids
+            .slice(0,10)
+            .map(otuID => `OTU ${otuID}`)
+            .reverse();
+        let barData =[
+            {
+                y: yticks,
+                x: sample_values.slice(0,10).reverse(),
+                text: otu_labels.slice(0,10).reverse(),
+                type: "bar",
+                orientation: "h",
+            },
+        ];
 
-//         let {otu_ids,otu_labels,sample_values} = sample;
-        
-//         var data =[
-//             {
-//                 x: sample_values.slice(0,10).reverse(),
-//                 y: otu_ids.slice(0,10).reverse().map(z =>`OTU ${x}`),
-//                 text: otu_labels.slice(0,10).reverse(),
-//                 type:'bar',
-//                 orientation: 'h'
-//             }
-//         ];
+        let barLayout = {
+            title: "Top 10 Bacteria Cultures Found ",
+            margin: { t: 30, l: 150 },
+        };
+        Plotly.newPlot("bar" , barData , barLayout);
 
-//         Plotly.newPlot('bar',data);
-
-//     })
-// }
+        let bubbleTrace = {
+            x: otu_ids,
+            y: sample_values,
+            mode: 'markers',
+            marker: {
+                color: ['rgb(93, 164, 214)', 'rgb(255, 144, 14)',  'rgb(44, 160, 101)', 'rgb(255, 65, 54)'],
+                // opacity: [1, 0.8, 0.6, 0.4],
+                size: [40, 60, 80, 100]
+              }
+        };
+        let bubbleData = [bubbleTrace];
+          
+        let bubbleLayout = {
+            title: 'Bacteria Cultures',
+            showlegend: true,
+            height: 600,
+            width: 600
+          };
+          
+          Plotly.newPlot("bubble", bubbleData, bubbleLayout);
+          
+        });
+    };
 setUp();
+
