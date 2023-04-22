@@ -52,21 +52,28 @@ function allGraphs(subjectId) {
             .slice(0,10)
             .map(otuID => `OTU ${otuID}`)
             .reverse();
+        // 1. Create the trace for the bar chart.
+
         let barData =[
             {
                 y: yticks,
                 x: sample_values.slice(0,10).reverse(),
-                text: otu_labels.slice(0,10).reverse(),
+                hovertext: otu_labels.slice(0,10).reverse(),
                 type: "bar",
                 orientation: "h",
             },
         ];
+         // 2. Create the layout for the bar chart.
 
         let barLayout = {
             title: "Top 10 Bacteria Cultures Found ",
             margin: { t: 30, l: 150 },
         };
+        // 3. Use Plotly to plot the data with the layout.
+
         Plotly.newPlot("bar" , barData , barLayout);
+
+        // 1. Create the trace for the bubble chart.
 
         let bubbleTrace = {
             x: otu_ids,
@@ -80,14 +87,19 @@ function allGraphs(subjectId) {
               }
         };
         let bubbleData = [bubbleTrace];
+         // 2. Create the layout for the bubble chart.
           
         let bubbleLayout = {
-            title: 'Bacteria Cultures',
-            showlegend: true,
+            title: 'Bacteria Cultures per Sample',
+            margin: {t: 0},
+            hovermode: "closest",
+            xaxis: { title: "OTU ID"},
+            margin: { t: 30},
             height: 600,
             width: 1500
           };
-          
+           // 3. Use Plotly to plot the data with the layout.
+        
           Plotly.newPlot("bubble", bubbleData, bubbleLayout);
           
         });
