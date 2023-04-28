@@ -28,11 +28,44 @@ function demoBox(subjectId) {
     d3.json(URL).then((data) => {
        panel.html('');
        let subjectMeta = data.metadata.filter(obj => obj.id == subjectId)[0];
+       gaugeGraph(subjectMeta.wfreq);
         Object.entries(subjectMeta).forEach(([key, val]) => {
             panel.append('h6').text(`${key.toUpperCase()}: ${val}`)
         });
     });
 }   
+function gaugeGraph(wfreq){
+    let gaugeData = [
+        {
+            domain: { x: [0, 1], y: [0, 1] },
+            value: wfreq,
+            title: { text: "Weekly Scrubs" },
+            type: "indicator",
+            mode: "gauge+number",
+            gauge: {
+                axis: { range: [null, 10] },
+                steps: [
+                  { range: [0, 1], color: "#ebfaeb" },
+                  { range: [1, 2], color: "#c2f0c2" },
+                  { range: [2, 3], color: "#99e699" },
+                  { range: [3, 4], color: "#70db70" },
+                  { range: [4, 5], color: "#47d147" },
+                  { range: [5, 6], color: "#33cc33" },
+                  { range: [6, 7], color: "#2eb82e" },
+                  { range: [7, 8], color: "#29a329" },
+                  { range: [8, 9], color: "#248f24" },
+                  { range: [9, 10], color: "#145214" }
+                ],
+            }
+        }
+    ];
+    // 2. Create the layout for the bubble chart.
+    var gaugeLayout = { width: 600, height: 500, margin: { t: 0, b: 0 } };
+
+     // 3. Use Plotly to plot the data with the layout.
+    Plotly.newPlot('gauge', gaugeData, gaugeLayout);
+}
+
 
 function allGraphs(subjectId) {
     console.log(`we're using ${subjectId} info to make graphs!`)
@@ -60,6 +93,7 @@ function allGraphs(subjectId) {
                 x: sample_values.slice(0,10).reverse(),
                 hovertext: otu_labels.slice(0,10).reverse(),
                 type: "bar",
+                marker:{color:"#29a329"},
                 orientation: "h",
             },
         ];
@@ -101,6 +135,11 @@ function allGraphs(subjectId) {
            // 3. Use Plotly to plot the data with the layout.
         
           Plotly.newPlot("bubble", bubbleData, bubbleLayout);
+
+        
+        
+
+        
           
         });
     };
